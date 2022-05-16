@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/topico")
@@ -33,7 +34,7 @@ class TopicoResource
     }
 
     @PostMapping
-    fun insert(@RequestBody dto: NovoTopicoDTO): ResponseEntity<Void> {
+    fun insert(@Valid @RequestBody dto: NovoTopicoDTO): ResponseEntity<Void> {
         this.topicoService.save(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
