@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class TopicoService {
+    var topicos: List<Topico> = ArrayList()
 
-    fun listAll(): List<Topico> {
-        val topico = Topico(
-            id = 12,
+    init {
+        val topico1 = Topico(
+            id = 1,
             titulo = "Duvida Kotlin",
             messagem = "Variavel não encontrada",
             curso = Curso(
@@ -24,6 +25,46 @@ class TopicoService {
                 email = "alex@alex.com"
             )
         )
-        return listOf(topico, topico, topico, topico)
+
+        val topico2 = Topico(
+            id = 2,
+            titulo = "Desabilitar Dev quarkus",
+            messagem = "Desabilita o modo Dev",
+            curso = Curso(
+                id = 2L,
+                nome = "Quarkus",
+                categoria = "Programação"
+            ),
+            autor = Usuario(
+                id = 2L,
+                nome = "Alex",
+                email = "alex@alex.com"
+            )
+        )
+        val topico3 = Topico(
+            id = 3,
+            titulo = "Duvida Kotlin",
+            messagem = "Variavel não encontrada",
+            curso = Curso(
+                id = 3L,
+                nome = "Kotlin",
+                categoria = "Programação"
+            ),
+            autor = Usuario(
+                id = 3L,
+                nome = "Alex",
+                email = "alex@alex.com"
+            )
+        )
+
+        this.topicos = listOf(topico1, topico2, topico3)
+    }
+
+    fun listAll(): List<Topico> {
+        return this.topicos
+    }
+
+    fun findById(id: Long): Topico? {
+        return this.topicos.find { id.equals(it.id) };
     }
 }
