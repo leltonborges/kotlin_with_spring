@@ -67,4 +67,10 @@ class TopicoService {
     fun findById(id: Long): Topico? {
         return this.topicos.find { id.equals(it.id) };
     }
+
+    fun save(topico: Topico) {
+        this.topicos.plus(topico);
+    }
+
+
 }
