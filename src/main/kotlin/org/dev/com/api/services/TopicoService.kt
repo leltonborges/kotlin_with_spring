@@ -1,19 +1,27 @@
 package org.dev.com.api.services
 
+import org.dev.com.api.config.toTopico
+import org.dev.com.api.config.toTopicoViewDTO
+import org.dev.com.api.dtos.NovoTopicoDTO
+import org.dev.com.api.dtos.TopicoViewDTO
 import org.dev.com.api.models.Curso
 import org.dev.com.api.models.Topico
 import org.dev.com.api.models.Usuario
 import org.springframework.stereotype.Service
 
 @Service
-class TopicoService {
+class TopicoService(
+    private val cursoService: CursoService,
+    private val usuarioService: UsuarioService
+) {
+
     var topicos: List<Topico> = ArrayList()
 
     init {
         val topico1 = Topico(
             id = 1,
             titulo = "Duvida Kotlin",
-            messagem = "Variavel não encontrada",
+            mensagem = "Variavel não encontrada",
             curso = Curso(
                 id = 1L,
                 nome = "Kotlin",
@@ -29,7 +37,7 @@ class TopicoService {
         val topico2 = Topico(
             id = 2,
             titulo = "Desabilitar Dev quarkus",
-            messagem = "Desabilita o modo Dev",
+            mensagem = "Desabilita o modo Dev",
             curso = Curso(
                 id = 2L,
                 nome = "Quarkus",
@@ -44,7 +52,7 @@ class TopicoService {
         val topico3 = Topico(
             id = 3,
             titulo = "Duvida Kotlin",
-            messagem = "Variavel não encontrada",
+            mensagem = "Variavel não encontrada",
             curso = Curso(
                 id = 3L,
                 nome = "Kotlin",
@@ -60,17 +68,16 @@ class TopicoService {
         this.topicos = listOf(topico1, topico2, topico3)
     }
 
-    fun listAll(): List<Topico> {
-        return this.topicos
+    fun listAll(): List<TopicoViewDTO> {
+        return this.topicos.map(Topico::toTopicoViewDTO)
     }
 
     fun findById(id: Long): Topico? {
-        return this.topicos.find { id.equals(it.id) };
+        return this.topicos.find { t -> id.equals(t.id) }
     }
 
-    fun save(topico: Topico) {
-        this.topicos.plus(topico);
+    fun save(dto: NovoTopicoDTO) {
+        this.topicos = this.topicos.plus(dto.toTopico(cursoService, usuarioService));
     }
-
 
 }

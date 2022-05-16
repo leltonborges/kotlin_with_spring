@@ -1,5 +1,7 @@
 package org.dev.com.api.resources
 
+import org.dev.com.api.dtos.NovoTopicoDTO
+import org.dev.com.api.dtos.TopicoViewDTO
 import org.dev.com.api.models.Topico
 import org.dev.com.api.services.TopicoService
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +22,7 @@ class TopicoResource
 ) {
 
     @GetMapping
-    fun listAll(): List<Topico> {
+    fun listAll(): List<TopicoViewDTO> {
         return this.topicoService.listAll();
     }
 
@@ -31,8 +33,8 @@ class TopicoResource
     }
 
     @PostMapping
-    fun insert(@RequestBody topico: Topico): ResponseEntity<Void> {
-        this.topicoService.save(topico)
+    fun insert(@RequestBody dto: NovoTopicoDTO): ResponseEntity<Void> {
+        this.topicoService.save(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
