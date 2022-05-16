@@ -1,9 +1,10 @@
 package org.dev.com.api.services
 
-import org.dev.com.api.config.toTopico
 import org.dev.com.api.config.toTopicoViewDTO
 import org.dev.com.api.dtos.NovoTopicoDTO
 import org.dev.com.api.dtos.TopicoViewDTO
+import org.dev.com.api.mapper.TopicoMapper
+import org.dev.com.api.mapper.TopicoViewMapper
 import org.dev.com.api.models.Curso
 import org.dev.com.api.models.Topico
 import org.dev.com.api.models.Usuario
@@ -11,9 +12,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class TopicoService(
-    private val cursoService: CursoService,
-    private val usuarioService: UsuarioService
-) {
+    private val topicoMapper: TopicoMapper,
+    private val topicoViewMapper: TopicoViewMapper
+){
 
     var topicos: List<Topico> = ArrayList()
 
@@ -70,6 +71,7 @@ class TopicoService(
 
     fun listAll(): List<TopicoViewDTO> {
         return this.topicos.map(Topico::toTopicoViewDTO)
+//        return this.topicos.map(topicoViewMapper::map)
     }
 
     fun findById(id: Long): Topico? {
@@ -77,7 +79,7 @@ class TopicoService(
     }
 
     fun save(dto: NovoTopicoDTO) {
-        this.topicos = this.topicos.plus(dto.toTopico(cursoService, usuarioService));
+        this.topicos = this.topicos.plus(topicoMapper.map(dto));
     }
 
 }
