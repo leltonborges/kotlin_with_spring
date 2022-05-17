@@ -1,7 +1,7 @@
 package org.dev.com.api.config
 
 import org.dev.com.api.dtos.NovoTopicoDTO
-import org.dev.com.api.dtos.TopicoViewDTO
+import org.dev.com.api.dtos.ViewTopicoDTO
 import org.dev.com.api.models.Topico
 import org.dev.com.api.services.CursoService
 import org.dev.com.api.services.UsuarioService
@@ -16,8 +16,8 @@ fun NovoTopicoDTO.toTopico(cursoService: CursoService, usuarioService: UsuarioSe
     )
 }
 
-fun Topico.toTopicoViewDTO(): TopicoViewDTO {
-    return TopicoViewDTO(
+fun Topico.toTopicoViewDTO(): ViewTopicoDTO {
+    return ViewTopicoDTO(
         id = this.id,
         titulo = this.titulo,
         messagem = this.mensagem,

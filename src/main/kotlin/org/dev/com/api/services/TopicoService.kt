@@ -1,8 +1,9 @@
 package org.dev.com.api.services
 
 import org.dev.com.api.config.toTopicoViewDTO
+import org.dev.com.api.dtos.AtualizarTopicoDTO
 import org.dev.com.api.dtos.NovoTopicoDTO
-import org.dev.com.api.dtos.TopicoViewDTO
+import org.dev.com.api.dtos.ViewTopicoDTO
 import org.dev.com.api.mapper.TopicoMapper
 import org.dev.com.api.mapper.TopicoViewMapper
 import org.dev.com.api.models.Curso
@@ -69,17 +70,46 @@ class TopicoService(
         this.topicos = listOf(topico1, topico2, topico3)
     }
 
-    fun listAll(): List<TopicoViewDTO> {
+    fun listAll(): List<ViewTopicoDTO> {
         return this.topicos.map(Topico::toTopicoViewDTO)
 //        return this.topicos.map(topicoViewMapper::map)
     }
 
     fun findById(id: Long): Topico? {
-        return this.topicos.find { t -> id.equals(t.id) }
+        return this.topicos.find { t -> id == t.id }
     }
 
     fun save(dto: NovoTopicoDTO) {
         this.topicos = this.topicos.plus(topicoMapper.map(dto));
+    }
+
+    fun atualizar(dto: AtualizarTopicoDTO) {
+        val topico = topicos
+            .stream()
+            .filter { t -> dto.id == t.id }
+            .findFirst()
+            .get()
+
+        topicos = topicos.minus(topico).plus(Topico(
+            id = dto.id,
+            titulo =  dto.titulo,
+            mensagem = dto.mensagem,
+            curso = topico.curso,
+            autor = topico.autor,
+            status = topico.status,
+            respostas = topico.respostas,
+            dataCriacao = topico.dataCriacao
+        ))
+    }
+
+    fun delete(id: Long) {
+        val topico = topicos
+            .stream()
+            .filter { t -> id == t.id }
+            .findFirst()
+            .get()
+
+        topicos = topicos.minus(topico)
     }
 
 }

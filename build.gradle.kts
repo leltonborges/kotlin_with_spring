@@ -11,6 +11,8 @@ group = "org.dev.com"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
+val versionModelMapper = "3.1.0"
+
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -27,9 +29,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("dev.akkinoc.spring.boot:orika-spring-boot-starter:2.2.7")
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
+    implementation("org.modelmapper:modelmapper:$versionModelMapper")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 }

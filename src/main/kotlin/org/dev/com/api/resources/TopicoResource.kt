@@ -1,15 +1,18 @@
 package org.dev.com.api.resources
 
+import org.dev.com.api.dtos.AtualizarTopicoDTO
 import org.dev.com.api.dtos.NovoTopicoDTO
-import org.dev.com.api.dtos.TopicoViewDTO
+import org.dev.com.api.dtos.ViewTopicoDTO
 import org.dev.com.api.models.Topico
 import org.dev.com.api.services.TopicoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -23,7 +26,7 @@ class TopicoResource
 ) {
 
     @GetMapping
-    fun listAll(): List<TopicoViewDTO> {
+    fun listAll(): List<ViewTopicoDTO> {
         return this.topicoService.listAll();
     }
 
@@ -37,6 +40,16 @@ class TopicoResource
     fun insert(@Valid @RequestBody dto: NovoTopicoDTO): ResponseEntity<Void> {
         this.topicoService.save(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    @PutMapping
+    fun update(@Valid @RequestBody dto: AtualizarTopicoDTO){
+        this.topicoService.atualizar(dto)
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable("id") id: Long) {
+        this.topicoService.delete(id);
     }
 
 }
