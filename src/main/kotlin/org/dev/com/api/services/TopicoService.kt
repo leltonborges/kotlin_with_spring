@@ -4,6 +4,7 @@ import org.dev.com.api.config.toTopicoViewDTO
 import org.dev.com.api.dtos.AtualizarTopicoDTO
 import org.dev.com.api.dtos.NovoTopicoDTO
 import org.dev.com.api.dtos.ViewTopicoDTO
+import org.dev.com.api.exceptions.NotFoundException
 import org.dev.com.api.mapper.TopicoMapper
 import org.dev.com.api.mapper.TopicoViewMapper
 import org.dev.com.api.models.Curso
@@ -81,7 +82,7 @@ class TopicoService(
             .filter { t -> id == t.id }
             .map(topicoViewMapper::map)
             .findFirst()
-            .get()
+            .orElseThrow { NotFoundException("Não encontrado: ${id}") }
     }
 
     fun save(dto: NovoTopicoDTO): ViewTopicoDTO {
@@ -95,7 +96,7 @@ class TopicoService(
             .stream()
             .filter { t -> dto.id == t.id }
             .findFirst()
-            .get()
+            .orElseThrow { NotFoundException("Não encontrado: ${dto.id}") }
 
         val topicoAtualizado = Topico(
             id = dto.id,
@@ -117,7 +118,7 @@ class TopicoService(
             .stream()
             .filter { t -> id == t.id }
             .findFirst()
-            .get()
+            .orElseThrow { NotFoundException("Não encontrado: ${id}") }
 
         topicos = topicos.minus(topico)
     }
