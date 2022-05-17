@@ -3,7 +3,6 @@ package org.dev.com.api.resources
 import org.dev.com.api.dtos.AtualizarTopicoDTO
 import org.dev.com.api.dtos.NovoTopicoDTO
 import org.dev.com.api.dtos.ViewTopicoDTO
-import org.dev.com.api.models.Topico
 import org.dev.com.api.services.TopicoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -15,7 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.util.UriBuilder
+import org.springframework.web.util.UriComponentsBuilder
+import java.net.URI
 import javax.validation.Valid
 
 @RestController
@@ -30,23 +33,28 @@ class TopicoResource
         return this.topicoService.listAll();
     }
 
+
     @GetMapping("/{id}")
-    fun findById(@PathVariable("id") id: Long): ResponseEntity<Topico>? {
-        val topico = this.topicoService.findById(id)
-        return ResponseEntity.ok(topico);
+    fun findById(@PathVariable("id") id: Long): ViewTopicoDTO {
+        return topicoService.findById(id);
     }
 
     @PostMapping
-    fun insert(@Valid @RequestBody dto: NovoTopicoDTO): ResponseEntity<Void> {
-        this.topicoService.save(dto)
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+    fun insert(
+        @Valid @RequestBody dto: NovoTopicoDTO,
+        uriBuilder: UriComponentsBuilder
+    ): ResponseEntity<ViewTopicoDTO> {
+        val viewTopicoDTO = this.topicoService.save(dto)
+        val uri = uriBuilder.path("/topico/${viewTopicoDTO.id}").build().toUri()
+        return ResponseEntity.created(uri).body(viewTopicoDTO);
     }
 
     @PutMapping
-    fun update(@Valid @RequestBody dto: AtualizarTopicoDTO){
-        this.topicoService.atualizar(dto)
+    fun update(@Valid @RequestBody dto: AtualizarTopicoDTO): ResponseEntity<ViewTopicoDTO> {
+        return ResponseEntity.ok(this.topicoService.atualizar(dto))
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     fun delete(@PathVariable("id") id: Long) {
         this.topicoService.delete(id);

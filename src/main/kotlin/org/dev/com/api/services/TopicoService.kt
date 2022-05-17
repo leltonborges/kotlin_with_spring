@@ -75,31 +75,41 @@ class TopicoService(
 //        return this.topicos.map(topicoViewMapper::map)
     }
 
-    fun findById(id: Long): Topico? {
-        return this.topicos.find { t -> id == t.id }
+    fun findById(id: Long): ViewTopicoDTO {
+        return this.topicos
+            .stream()
+            .filter { t -> id == t.id }
+            .map(topicoViewMapper::map)
+            .findFirst()
+            .get()
     }
 
-    fun save(dto: NovoTopicoDTO) {
-        this.topicos = this.topicos.plus(topicoMapper.map(dto));
+    fun save(dto: NovoTopicoDTO): ViewTopicoDTO {
+        val topico = topicoMapper.map(dto)
+        this.topicos = this.topicos.plus(topico);
+        return topicoViewMapper.map(topico)
     }
 
-    fun atualizar(dto: AtualizarTopicoDTO) {
+    fun atualizar(dto: AtualizarTopicoDTO): ViewTopicoDTO {
         val topico = topicos
             .stream()
             .filter { t -> dto.id == t.id }
             .findFirst()
             .get()
 
-        topicos = topicos.minus(topico).plus(Topico(
+        val topicoAtualizado = Topico(
             id = dto.id,
-            titulo =  dto.titulo,
+            titulo = dto.titulo,
             mensagem = dto.mensagem,
             curso = topico.curso,
             autor = topico.autor,
             status = topico.status,
             respostas = topico.respostas,
             dataCriacao = topico.dataCriacao
-        ))
+        )
+        topicos = topicos.minus(topico).plus(topicoAtualizado)
+
+        return topicoViewMapper.map(topicoAtualizado)
     }
 
     fun delete(id: Long) {
