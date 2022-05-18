@@ -1,14 +1,23 @@
 package org.dev.com.api.models
 
 import java.time.LocalDateTime
+import javax.persistence.*
 
+@Entity(name = "tb_topico")
 data class Topico(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     val titulo: String,
     val mensagem: String,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
+    @ManyToOne
     val curso: Curso,
+    @ManyToOne
     val autor: Usuario,
+    @Enumerated(EnumType.STRING)
     val status: StatusTopico = StatusTopico.NAO_RESPONDIDO,
+    @OneToMany(mappedBy = "topico")
     val respostas: List<Resposta> = ArrayList()
-)
+) {
+    constructor() : this(null, "", "", LocalDateTime.now(), Curso(), Usuario())
+}
