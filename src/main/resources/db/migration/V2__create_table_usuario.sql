@@ -1,9 +1,9 @@
 CREATE TABLE TB_USUARIO
 (
-    id    bigint not null auto_increment,
-    nome  varchar(50) not null,
-    email varchar(50) not null,
-    constraint PK_usuario_tb_usuario_index primary key (id)
+    ID    bigint not null auto_increment,
+    NOME  varchar(50) not null,
+    EMAIL varchar(50) not null,
+    constraint PK_usuario_tb_usuario_index primary key (ID)
 );
 
 INSERT INTO TB_USUARIO (NOME, EMAIL)

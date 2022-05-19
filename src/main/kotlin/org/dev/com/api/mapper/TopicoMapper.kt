@@ -13,7 +13,6 @@ class TopicoMapper(
 ) : Mapper<NovoTopicoDTO, Topico> {
     override fun map(source: NovoTopicoDTO): Topico {
         return Topico(
-            id = IntRange(1, 100).random().toLong(),
             titulo = source.titulo,
             mensagem = source.mensagem,
             curso = cursoService.findById(source.idCurso),
