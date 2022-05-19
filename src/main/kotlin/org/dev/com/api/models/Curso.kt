@@ -1,5 +1,6 @@
 package org.dev.com.api.models
 
+import java.io.Serializable
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -11,6 +12,4 @@ data class Curso(
     val id: Long? = null,
     val nome: String,
     val categoria: String
-) {
-    constructor() : this(null, "", "")
-}
+) : Serializable

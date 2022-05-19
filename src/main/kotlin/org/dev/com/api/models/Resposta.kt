@@ -1,9 +1,10 @@
 package org.dev.com.api.models
 
+import java.io.Serializable
 import java.time.LocalDateTime
 import javax.persistence.*
 
-@Entity
+@Entity(name= "tb_resposta")
 data class Resposta(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -14,6 +15,4 @@ data class Resposta(
     @ManyToOne
     val topico: Topico,
     val solucao: Boolean
-) {
-    constructor() : this(null, "", LocalDateTime.now(), Usuario(), Topico(), false)
-}
+) : Serializable

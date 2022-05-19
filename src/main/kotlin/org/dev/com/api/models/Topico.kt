@@ -1,5 +1,6 @@
 package org.dev.com.api.models
 
+import java.io.Serializable
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
@@ -20,6 +21,4 @@ data class Topico(
     @field:OneToMany(mappedBy = "topico")
 //    @OneToMany(mappedBy = "topico")
     val respostas: List<Resposta> = ArrayList()
-) {
-    constructor() : this(null, "", "", LocalDateTime.now(), Curso(), Usuario())
-}
+) : Serializable
