@@ -20,10 +20,12 @@ class TopicoService(
     private val topicoRepository: TopicoRepository
 ) {
 
-    fun listAll(): List<ViewTopicoDTO> {
-        return this.topicoRepository
-            .findAll()
-            .map(Topico::toTopicoViewDTO)
+    fun listAll(nomeCurso: String?): List<ViewTopicoDTO> {
+        val all =
+            if (nomeCurso == null) this.topicoRepository.findAll()
+            else this.topicoRepository.findAllByCurso_Nome(nomeCurso)
+
+        return all.map(Topico::toTopicoViewDTO)
 //        return this.topicos.map(topicoViewMapper::map)
     }
 

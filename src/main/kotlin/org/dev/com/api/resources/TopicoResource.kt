@@ -20,8 +20,8 @@ class TopicoResource
 ) {
 
     @GetMapping
-    fun listAll(): List<ViewTopicoDTO> {
-        return this.topicoService.listAll();
+    fun listAll(@RequestParam(required = false) nomeCurso: String?): List<ViewTopicoDTO> {
+        return this.topicoService.listAll(nomeCurso);
     }
 
     @GetMapping("/{id}")
