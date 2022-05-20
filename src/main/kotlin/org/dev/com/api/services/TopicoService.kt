@@ -7,10 +7,10 @@ import org.dev.com.api.dtos.ViewTopicoDTO
 import org.dev.com.api.exceptions.NotFoundException
 import org.dev.com.api.mapper.TopicoMapper
 import org.dev.com.api.mapper.TopicoViewMapper
-import org.dev.com.api.models.Curso
 import org.dev.com.api.models.Topico
-import org.dev.com.api.models.Usuario
 import org.dev.com.api.repositories.TopicoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,10 +20,13 @@ class TopicoService(
     private val topicoRepository: TopicoRepository
 ) {
 
-    fun listAll(nomeCurso: String?): List<ViewTopicoDTO> {
+    fun listAll(
+        nomeCurso: String?,
+        paginacao: Pageable
+    ): Page<ViewTopicoDTO> {
         val all =
-            if (nomeCurso == null) this.topicoRepository.findAll()
-            else this.topicoRepository.findAllByCurso_Nome(nomeCurso)
+            if (nomeCurso == null) this.topicoRepository.findAll(paginacao)
+            else this.topicoRepository.findAllByCurso_Nome(nomeCurso, paginacao)
 
         return all.map(Topico::toTopicoViewDTO)
 //        return this.topicos.map(topicoViewMapper::map)
