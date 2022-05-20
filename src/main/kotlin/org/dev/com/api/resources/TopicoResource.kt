@@ -5,6 +5,9 @@ import org.dev.com.api.dtos.NovoTopicoDTO
 import org.dev.com.api.dtos.ViewTopicoDTO
 import org.dev.com.api.services.TopicoService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.CachePut
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -25,6 +28,7 @@ class TopicoResource
     private val topicoService: TopicoService
 ) {
 
+    @Cacheable(value = ["topicoResource_all"])
     @GetMapping
     fun listAll(
         @RequestParam(required = false) nomeCurso: String?,
@@ -38,6 +42,7 @@ class TopicoResource
         return topicoService.findById(id);
     }
 
+    @CacheEvict(value = ["topicoResource_all"], allEntries = true)
     @PostMapping
     @Transactional
     fun insert(
@@ -49,12 +54,15 @@ class TopicoResource
         return ResponseEntity.created(uri).body(viewTopicoDTO);
     }
 
+    @CacheEvict(value = ["topicoResource_all"], allEntries = true)
     @PutMapping
     @Transactional
     fun update(@Valid @RequestBody dto: AtualizarTopicoDTO): ResponseEntity<ViewTopicoDTO> {
         return ResponseEntity.ok(this.topicoService.atualizar(dto))
     }
 
+//    @CacheEvict(value = ["topicoResource_all"], allEntries = true)
+    @CachePut(value = ["topicoResource_all"])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Transactional
