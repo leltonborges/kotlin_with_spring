@@ -3,6 +3,7 @@ package org.dev.com.api.services
 import org.dev.com.api.config.toTopicoViewDTO
 import org.dev.com.api.dtos.AtualizarTopicoDTO
 import org.dev.com.api.dtos.NovoTopicoDTO
+import org.dev.com.api.dtos.TopicoPorCategoriaDTO
 import org.dev.com.api.dtos.ViewTopicoDTO
 import org.dev.com.api.exceptions.NotFoundException
 import org.dev.com.api.mapper.TopicoMapper
@@ -65,6 +66,10 @@ class TopicoService(
             .findById(id)
             .orElseThrow { NotFoundException("Não encontrado: ${id}") }
         this.topicoRepository.delete(topico)
+    }
+
+    fun relatorio(): List<TopicoPorCategoriaDTO> {
+        return this.topicoRepository.relatorio()
     }
 
 }

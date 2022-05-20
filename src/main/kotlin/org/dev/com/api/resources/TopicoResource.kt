@@ -2,6 +2,7 @@ package org.dev.com.api.resources
 
 import org.dev.com.api.dtos.AtualizarTopicoDTO
 import org.dev.com.api.dtos.NovoTopicoDTO
+import org.dev.com.api.dtos.TopicoPorCategoriaDTO
 import org.dev.com.api.dtos.ViewTopicoDTO
 import org.dev.com.api.services.TopicoService
 import org.springframework.beans.factory.annotation.Autowired
@@ -61,7 +62,7 @@ class TopicoResource
         return ResponseEntity.ok(this.topicoService.atualizar(dto))
     }
 
-//    @CacheEvict(value = ["topicoResource_all"], allEntries = true)
+    //    @CacheEvict(value = ["topicoResource_all"], allEntries = true)
     @CachePut(value = ["topicoResource_all"])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
@@ -70,4 +71,8 @@ class TopicoResource
         this.topicoService.delete(id);
     }
 
+    @GetMapping("/relatorio")
+    fun relatorio(): List<TopicoPorCategoriaDTO> {
+        return this.topicoService.relatorio()
+    }
 }
