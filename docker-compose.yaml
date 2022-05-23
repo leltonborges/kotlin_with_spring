@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  forum:
+    image: api-forum:${API_VERSION}
+    container_name: api-forum
+    build:
+      context: ./
+      dockerfile: src/main/docker/forum.dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - api-forum
+
+networks:
+  api-forum:
+    driver: bridge
+    name: api-forum-networks
