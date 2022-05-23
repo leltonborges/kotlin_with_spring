@@ -12,6 +12,10 @@ class UsuarioService(
     private val repository: UsuarioRepository
 ) : UserDetailsService {
 
+    fun findAll(): List<Usuario> {
+        return this.repository.findAll();
+    }
+
     fun findById(id: Long): Usuario {
         return this.repository
             .findById(id)
