@@ -2,7 +2,7 @@ CREATE TABLE TB_USUARIO
 (
     ID    bigint not null auto_increment,
     NOME  varchar(50) not null,
-    EMAIL varchar(50) not null,
+    EMAIL varchar(50) not null unique,
     constraint PK_usuario_tb_usuario_index primary key (ID)
 );
 
