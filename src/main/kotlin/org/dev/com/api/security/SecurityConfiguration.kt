@@ -20,6 +20,8 @@ class SecurityConfiguration(
     override fun configure(http: HttpSecurity?) {
         http?.cors()?.disable()
         http?.authorizeRequests()?.
+//            antMatchers("/topico")?.hasAnyAuthority("ADMIN", "GERENTE")?.
+            antMatchers("/topico")?.hasAnyRole("ADMIN", "GERENTE")?.
             antMatchers("/h2-console/**", "/")?.permitAll()?.
         and()?.authorizeRequests()?.
             anyRequest()?.authenticated()?.
