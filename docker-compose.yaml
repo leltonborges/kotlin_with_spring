@@ -6,6 +6,7 @@ services:
     build:
       context: ./
       dockerfile: src/main/docker/forum.dockerfile
+      target: build
     ports:
       - "8090:8090"
     networks:

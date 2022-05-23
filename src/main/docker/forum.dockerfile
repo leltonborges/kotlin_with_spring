@@ -1,10 +1,13 @@
-FROM maven:3-openjdk-17 as build
-RUN ["mvn"]
-CMD ["clean", "package"]
+FROM gradle:jdk17 as build
+WORKDIR /app
+
+COPY . ./
+RUN ["gradle"]
+CMD ["build"]
 
 FROM openjdk:17-buster as hom
 WORKDIR /app
-COPY --from=build /app/target/*.jar ./application.jar
+COPY --from=build /app/build/libs/*SNAPSHOT.jar ./app/application.jar
 
 ENTRYPOINT ["java"]
 CMD ["-jar","application.jar"]
