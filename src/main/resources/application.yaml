@@ -10,3 +10,5 @@ spring:
   profiles:
     active: ${PROFILE:dev}
 
+jwt:
+  secret: super_secreta
