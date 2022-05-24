@@ -1,4 +1,4 @@
-package org.dev.com.api.security
+package org.dev.com.api.security.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.dev.com.api.dtos.Credencials
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 
 class JWTLoginFilter(
     private val authManager: AuthenticationManager,
-    private val jtwUtil: JWTUtil
+    private val jwtUtil: JWTUtil
 ) : UsernamePasswordAuthenticationFilter() {
 
     override fun attemptAuthentication(
@@ -34,7 +34,7 @@ class JWTLoginFilter(
         authResult: Authentication?
     ) {
         val userName = (authResult?.principal as UserDetails).username
-        val token = jtwUtil.generateToken(userName)
+        val token = jwtUtil.generateToken(userName)
         response?.addHeader("Authorization", "Bearer $token")
         chain?.doFilter(request, response)
     }
