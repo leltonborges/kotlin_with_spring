@@ -17,7 +17,7 @@ class JWTAuthenticationFilter(
     ) {
         val tokerBearer = request.getHeader("Authorization")
         val jwt = getTokenDetail(tokerBearer)
-        if (jwtUtil.isValide(jwt)) {
+        if (jwtUtil.isValid(jwt)) {
             val authentication = jwtUtil.getAuthentication(jwt)
             SecurityContextHolder.getContext().authentication = authentication
         }

@@ -14,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.filter.OncePerRequestFilter
 
 @Configuration
 @EnableWebSecurity
@@ -24,17 +23,16 @@ class SecurityConfiguration(
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity?) {
-        http?.cors()?.disable()
-        http?.authorizeRequests()?.
+        http?.cors()?.disable()?.
+        authorizeRequests()?.
 //            antMatchers("/topico")?.hasAnyAuthority("ADMIN", "GERENTE")?.
 //            antMatchers("/topico")?.hasAnyRole("ADMIN", "GERENTE")?.
-            antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
-            antMatchers("/h2-console/**", "/")?.permitAll()?.
-        and()?.authorizeRequests()?.
-            anyRequest()?.authenticated()?.
-        and()
+        antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
+        antMatchers("/h2-console/**", "/")?.permitAll()?.
+        and()?.
+            authorizeRequests()?.anyRequest()?.authenticated()
         http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
-        http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil), OncePerRequestFilter::class.java)
+        http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
         http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
 

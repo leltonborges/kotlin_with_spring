@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
 class JWTLoginFilter(
     private val authManager: AuthenticationManager,
     private val jwtUtil: JWTUtil
-) : UsernamePasswordAuthenticationFilter() {
+) : UsernamePasswordAuthenticationFilter(authManager) {
 
     override fun attemptAuthentication(
         request: HttpServletRequest?,

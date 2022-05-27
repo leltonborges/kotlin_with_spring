@@ -2,42 +2,44 @@ package org.dev.com.api.jwt
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.dev.com.api.services.UsuarioService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Component
 import java.lang.IllegalArgumentException
 import java.util.*
 
 @Component
-class JWTUtil {
+class JWTUtil(
+    private val usuarioService: UsuarioService
+) {
     @Value("\${jwt.secret}")
     private lateinit var secketKey: String
 
     private val expiration = 3600000
 
     fun generateToken(username: String): String? {
-        return Jwts.builder().setSubject(username).setPayload(username)
+        return Jwts.builder()
+            .setSubject(username)
             .setExpiration(Date(System.currentTimeMillis() + expiration))
-            .signWith(SignatureAlgorithm.ES512, secketKey.toByteArray())
-            .compact();
+            .signWith(SignatureAlgorithm.HS512, secketKey.toByteArray())
+            .compact()
     }
 
-    fun isValide(jwt: String?): Boolean {
+    fun isValid(jwt: String?): Boolean {
         return try {
-            jwtClaims(jwt)
+            Jwts.parser().setSigningKey(secketKey.toByteArray()).parseClaimsJws(jwt)
             true
-        }catch (e: IllegalArgumentException){
+        } catch (e: IllegalArgumentException) {
             false
         }
     }
 
-    private fun jwtClaims(jwt: String?) = Jwts.parser()
-        .setSigningKey(secketKey.toByteArray())
-        .parseClaimsJwt(jwt)
-
     fun getAuthentication(jwt: String?): Authentication {
-        val username = jwtClaims(jwt).body.subject
-        return UsernamePasswordAuthenticationToken(username,null, null)
+        val username = Jwts.parser().setSigningKey(secketKey.toByteArray()).parseClaimsJws(jwt).body.subject
+        val user = usuarioService.loadUserByUsername(username)
+        return UsernamePasswordAuthenticationToken(username, null, user.authorities)
     }
 }
