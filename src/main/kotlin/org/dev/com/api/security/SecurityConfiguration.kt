@@ -23,16 +23,18 @@ class SecurityConfiguration(
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity?) {
-        http?.cors()?.disable()?.
+        http?.
+        csrf()?.disable()?.
         authorizeRequests()?.
-            antMatchers("/**/**")?.permitAll()
-//        antMatchers("/topico")?.hasAnyAuthority("ADMIN", "GERENTE")?.
-//        antMatchers("/topico")?.hasAnyRole("ADMIN", "GERENTE")?.
-//        antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
-//        antMatchers("/h2-console/**", "/")?.permitAll()
+        antMatchers("/topico")?.hasAnyRole("ADMIN", "GERENTE")?.
+        antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
+        antMatchers("/h2-console/**", "/")?.permitAll()?.
+        anyRequest()?.authenticated()
+
         http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
         http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
         http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
     }
 
     @Bean
