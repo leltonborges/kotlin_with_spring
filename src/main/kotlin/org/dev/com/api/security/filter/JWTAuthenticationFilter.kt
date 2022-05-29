@@ -16,8 +16,8 @@ class JWTAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val tokerBearer = request.getHeader("Authorization")
-        val jwt = getTokenDetail(tokerBearer)
+        val token = request.getHeader("Authorization")
+        val jwt = getTokenDetail(token)
         if (jwtUtil.isValid(jwt)) {
             val authentication = jwtUtil.getAuthentication(jwt)
             SecurityContextHolder.getContext().authentication = authentication
@@ -25,10 +25,10 @@ class JWTAuthenticationFilter(
         filterChain.doFilter(request, response)
     }
 
-    private fun getTokenDetail(tokerBearer: String?): String? {
-        return tokerBearer?.let { t ->
-            t.startsWith("Bearer ")
-            t.substring(7, t.length)
+    private fun getTokenDetail(token: String?): String? {
+        return token?.let { jwt ->
+            jwt.startsWith("Bearer ")
+            jwt.substring(7, jwt.length)
         }
     }
 

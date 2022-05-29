@@ -38,9 +38,9 @@ class JWTUtil(
         }
     }
 
-    fun getAuthentication(jwt: String?): Authentication {
+    fun getAuthentication(jwt: String?) : Authentication {
         val username = Jwts.parser().setSigningKey(secketKey.toByteArray()).parseClaimsJws(jwt).body.subject
-        val authorities = usuarioService.loadUserByUsername(username).authorities
-        return UsernamePasswordAuthenticationToken(username, null, authorities)
+        val user = usuarioService.loadUserByUsername(username)
+        return UsernamePasswordAuthenticationToken(username, null, user.authorities)
     }
 }
