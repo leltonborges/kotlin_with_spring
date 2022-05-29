@@ -3,12 +3,16 @@ server:
   servlet:
     encoding:
       charset: UTF-8
-    context-path: /v1
+#    context-path: /v1
 spring:
   application:
     name: app-forum
   profiles:
     active: ${PROFILE:dev}
+  security:
+    filter:
+      order: 10
 
 jwt:
   secret: super_secreta
+

@@ -20,9 +20,10 @@ class JWTUtil(
 
     private val expiration = 3600000
 
-    fun generateToken(username: String): String? {
+    fun generateToken(username: String, authorities: MutableCollection<out GrantedAuthority>): String? {
         return Jwts.builder()
             .setSubject(username)
+            .claim("role", authorities)
             .setExpiration(Date(System.currentTimeMillis() + expiration))
             .signWith(SignatureAlgorithm.HS512, secketKey.toByteArray())
             .compact()
@@ -39,7 +40,7 @@ class JWTUtil(
 
     fun getAuthentication(jwt: String?): Authentication {
         val username = Jwts.parser().setSigningKey(secketKey.toByteArray()).parseClaimsJws(jwt).body.subject
-        val user = usuarioService.loadUserByUsername(username)
-        return UsernamePasswordAuthenticationToken(username, null, user.authorities)
+        val authorities = usuarioService.loadUserByUsername(username).authorities
+        return UsernamePasswordAuthenticationToken(username, null, authorities)
     }
 }

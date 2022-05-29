@@ -13,9 +13,14 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class JWTLoginFilter(
+    private val url: String,
     private val authManager: AuthenticationManager,
     private val jwtUtil: JWTUtil
 ) : UsernamePasswordAuthenticationFilter(authManager) {
+
+    init {
+        super.setFilterProcessesUrl(url)
+    }
 
     override fun attemptAuthentication(
         request: HttpServletRequest?,
@@ -33,8 +38,8 @@ class JWTLoginFilter(
         chain: FilterChain?,
         authResult: Authentication?
     ) {
-        val userName = (authResult?.principal as UserDetails).username
-        val token = jwtUtil.generateToken(userName)
+        val user = (authResult?.principal as UserDetails)
+        val token = jwtUtil.generateToken(user.username, user.authorities)
         response?.addHeader("Authorization", "Bearer $token")
         chain?.doFilter(request, response)
     }

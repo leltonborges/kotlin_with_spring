@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse
 class JWTAuthenticationFilter(
     private val jwtUtil: JWTUtil
 ) : OncePerRequestFilter() {
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

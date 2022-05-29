@@ -25,12 +25,11 @@ class SecurityConfiguration(
     override fun configure(http: HttpSecurity?) {
         http?.cors()?.disable()?.
         authorizeRequests()?.
-//            antMatchers("/topico")?.hasAnyAuthority("ADMIN", "GERENTE")?.
-//            antMatchers("/topico")?.hasAnyRole("ADMIN", "GERENTE")?.
-        antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
-        antMatchers("/h2-console/**", "/")?.permitAll()?.
-        and()?.
-            authorizeRequests()?.anyRequest()?.authenticated()
+            antMatchers("/**/**")?.permitAll()
+//        antMatchers("/topico")?.hasAnyAuthority("ADMIN", "GERENTE")?.
+//        antMatchers("/topico")?.hasAnyRole("ADMIN", "GERENTE")?.
+//        antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
+//        antMatchers("/h2-console/**", "/")?.permitAll()
         http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
         http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
         http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
