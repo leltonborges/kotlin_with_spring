@@ -3,7 +3,7 @@ server:
   servlet:
     encoding:
       charset: UTF-8
-#    context-path: /v1
+    context-path: /v1
 spring:
   application:
     name: app-forum

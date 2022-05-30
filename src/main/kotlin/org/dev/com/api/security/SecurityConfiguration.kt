@@ -43,7 +43,7 @@ class SecurityConfiguration(
         authorizeRequests()?.
         antMatchers("/topico")?.hasAnyRole("ADMIN", "GERENTE")?.
         antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
-        antMatchers("/h2-console/**")?.permitAll()?.
+        antMatchers(*AUTH_WHITELIST)?.permitAll()?.
         anyRequest()?.authenticated()
 
         http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
@@ -52,7 +52,7 @@ class SecurityConfiguration(
     }
 
     override fun configure(web: WebSecurity?) {
-        web?.ignoring()?.antMatchers("/h2-console/**")
+        web?.ignoring()?.antMatchers(*AUTH_WHITELIST)
     }
 
     @Bean
