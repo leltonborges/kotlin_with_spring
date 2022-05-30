@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.6.21"
     id("org.jetbrains.kotlin.plugin.noarg") version "1.6.21"
+    id("org.springdoc.openapi-gradle-plugin") version "1.3.4"
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
 }
@@ -55,3 +56,9 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+openApi{
+    apiDocsUrl.set("http://localhost:8090/v1/v3/api-docs")
+    outputDir.set(file("$buildDir/docs"))
+    outputFileName.set("swagger.json")
+    waitTimeInSeconds.set(10)
+}
